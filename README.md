@@ -5,7 +5,7 @@ a lofi ascii based video chat for groups
 
 ## Demo
 
-You can play with it [here](https://meep-chat-fork.glitch.me)!
+You can play with it here: [https://lofii-demo.glitch.me](https://lofii-demo.glitch.me)!
 
 ## Usage
 
