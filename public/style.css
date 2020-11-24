@@ -2,8 +2,12 @@ body {
   text-align: center;
   color: #222;
   overflow: hidden;
-  background-image: url("https://img.freepik.com/free-photo/white-crumpled-paper-texture-background_1373-159.jpg?size=338&ext=jpg");
-  background-repeat: repeat;
+  color:#eee;
+  background-color:#222;
+  background-image:
+    linear-gradient(to right, #333 1px, transparent 1px),
+    linear-gradient(to bottom, #333 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 
 .face {

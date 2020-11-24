@@ -19,6 +19,7 @@ app.get("/", function(request, response) {
 let users = {};
 
 io.sockets.on("connection", function(socket) {
+  socket.emit("id", socket.id);
   socket.on("update", function(msg) {
     if ("face" in msg && "text" in msg && "loc" in msg) {
       if (
