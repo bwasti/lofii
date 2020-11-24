@@ -5,8 +5,14 @@ var SpeechRecognitionEvent =
 
 let face = "",
   text = "",
-  hat = "",
-  loc = [0, 0];
+  loc = [0, 0],
+  id = "";
+let hat = "",
+  eye_open = "*",
+  eye_closed = "-",
+  mouth_closed = "-",
+  mouth_open = "o",
+  mouth_wide = "O";
 let model, webcam, recognition, socket;
 let users = {};
 let user_divs = {};
@@ -17,43 +23,6 @@ function update() {
   }
   socket.emit("update", { loc: loc, face: face, text: text });
 }
-
-let colors = [
-  "#ff6347",
-  "#ff6d3c",
-  "#ff7732",
-  "#ff8127",
-  "#ff8b1c",
-  "#ff9512",
-  "#ff9e07",
-  "#ffa800",
-  "#ffaf00",
-  "#ffb700",
-  "#ffbe00",
-  "#ffc600",
-  "#ffcd00",
-  "#ffd500",
-  "#e6db0f",
-  "#bfe027",
-  "#99e53e",
-  "#73ea55",
-  "#4df06c",
-  "#26f583",
-  "#00fa9a",
-  "#00e896",
-  "#00d592",
-  "#00c38e",
-  "#00b18a",
-  "#009f87",
-  "#008c83",
-  "#007a86",
-  "#006699",
-  "#0053ac",
-  "#0040c0",
-  "#002dd3",
-  "#001ae6",
-  "#0006f9"
-];
 
 function getIdx(id, max_val) {
   var hash = 0,
@@ -69,6 +38,9 @@ function getIdx(id, max_val) {
 
 function render() {
   document.body.style.backgroundPosition = -loc[0] + "px " + -loc[1] + "px";
+  document.getElementById("user").style.color =
+    "hsl(" + getIdx(id, 36) * 10 + ",100%, 80%)";
+
   for (let user_id in users) {
     let user = users[user_id];
     if (Date.now() > user.time + 5000) {
@@ -81,8 +53,8 @@ function render() {
     let off_y = user.loc[1] - loc[1];
     if (!(user.id in user_divs)) {
       user_divs[user.id] = document.createElement("div");
-      user_divs[user.id].style.color = colors[getIdx(user.id, colors.length)];
-      //"hsl(" + getIdx(user.id, 36) * 10 + ",100%, 30%)";
+      user_divs[user.id].style.color =
+        "hsl(" + getIdx(user.id, 36) * 10 + ",100%, 80%)";
 
       let face = document.createElement("pre");
       let text = document.createElement("code");
@@ -111,6 +83,10 @@ function init_sockets() {
   socket = io.connect();
   socket.on("update", function(d) {
     users[d.id] = d;
+    render();
+  });
+  socket.on("id", function(d) {
+    id = d;
     render();
   });
 }
@@ -144,7 +120,7 @@ async function init_webcam() {
 function init_speech() {
   if (!SpeechRecognition) {
     document.getElementById("user").children[1].innerHTML =
-      "[use chrome/firefox]";
+      "[use chrome/firefox for speech]";
     return;
   }
   recognition = new SpeechRecognition();
@@ -175,6 +151,36 @@ function init_speech() {
         hat = prompt("please enter your 3 character hat");
         if (hat.length != 3) {
           alert("that's not three characters!");
+          hat = "";
+        }
+      }
+      if (str == "give me new eyes") {
+        eye_closed = prompt("enter an eye closed character");
+        if (eye_closed.length != 1) {
+          alert("one character only!");
+          eye_closed = "-";
+        }
+        eye_open = prompt("enter an eye open character");
+        if (eye_open.length != 1) {
+          alert("one character only!");
+          eye_open = "*";
+        }
+      }
+      if (str == "give me a new mouth") {
+        mouth_closed = prompt("enter a mouth closed character");
+        if (mouth_closed.length != 1) {
+          alert("one character only!");
+          mouth_closed = "-";
+        }
+        mouth_open = prompt("enter a mouth open character");
+        if (mouth_open.length != 1) {
+          alert("one character only!");
+          mouth_open = "o";
+        }
+        mouth_wide = prompt("enter a mouth wide open character");
+        if (mouth_wide.length != 1) {
+          alert("one character only!");
+          mouth_wide = "O";
         }
       }
       str = "<b>" + str + "</b>";
@@ -184,6 +190,7 @@ function init_speech() {
 
     timeout = setTimeout(function() {
       document.getElementById("user").children[1].textContent = "";
+      text = "";
       update();
     }, Math.max(str.split(" ").length * 500, 2000));
   };
@@ -271,14 +278,25 @@ async function predict() {
     let mouth = norm(keypoints[13], keypoints[14]);
     let closed_mouth = norm(keypoints[13], keypoints[12]);
     let wide_mouth = norm(keypoints[308], keypoints[78]) / 1.2;
-    let m_str = mouth < closed_mouth ? "-" : mouth > wide_mouth ? "O" : "o";
+    let m_str =
+      mouth < closed_mouth
+        ? mouth_closed
+        : mouth > wide_mouth
+        ? mouth_wide
+        : mouth_open;
     if (str.length) {
       str += "  ";
     }
-    str += (closed_left ? "-" : "*") + m_str + (closed_right ? "-" : "*");
+    str +=
+      (closed_left ? eye_closed : eye_open) +
+      m_str +
+      (closed_right ? eye_closed : eye_open);
     if (hat) {
       str = hat + "\n" + str;
     }
+  }
+  if (predictions.length > 1) {
+    alert("two faces not yet supported...");
   }
 
   document.getElementById("user").children[0].textContent = str;
