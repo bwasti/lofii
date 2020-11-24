@@ -5,7 +5,7 @@ a lo-fi ascii based video chat. [demo](https://lofii-demo.glitch.me)
 
 ![demo gif](https://github.com/bwasti/lofii/blob/main/demo.gif?raw=true)
 
-using speech recognition and face detection, lofii maps video chat into
+using speech recognition and face detection, lofii boils down video chat into
 a couple of characters.
 
 ## Usage
