@@ -3,7 +3,7 @@ lofii
 
 a lofi ascii based video chat for groups
 
-![demo gif](https://giant.gfycat.com/IgnorantChiefBass.gif)
+![demo gif](https://github.com/bwasti/lofii/blob/main/demo.gif?raw=true)
 
 ## Demo
 
