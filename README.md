@@ -1,7 +1,7 @@
 lofii
 =================
 
-a lofi ascii based video chat for groups
+a lo-fi ascii based video chat
 
 ![demo gif](https://github.com/bwasti/lofii/blob/main/demo.gif?raw=true)
 
