@@ -1,0 +1,39 @@
+body {
+  text-align: center;
+  color: #222;
+  overflow: hidden;
+  background-image: url("https://img.freepik.com/free-photo/white-crumpled-paper-texture-background_1373-159.jpg?size=338&ext=jpg");
+  background-repeat: repeat;
+}
+
+.face {
+  font-size: 3em;
+  margin: 0;
+}
+
+.text {
+  font-size: 1em;
+  width: 100px;
+  margin: 0 auto;
+}
+
+#user {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#webcam-container {
+  visibility: hidden;
+  float: right;
+}
+
+#start-button {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2em;
+  font-family: monospace;
+}
